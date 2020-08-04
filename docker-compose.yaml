@@ -1,0 +1,29 @@
+version: "3.7"
+services:
+  myapp-frontend:
+    build:
+      context: ./frontend
+    image: srinudkonda/mywebapp-frontend:2.0
+    depends_on:
+      - myapp-db
+    environment:
+      MY_DB_HOST_WRITE: myapp-db
+      MY_DB_HOST_READ: myapp-db
+      MY_DB_NAME: userdb
+      MY_DB_USER: dbuser
+      MY_DB_PASS: test123
+    ports:
+      - "9010:80"
+  myapp-db:
+    image: mysql:5.7
+    volumes:
+      - type: volume
+        source: myapp-db-vol
+        target: /var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: test123
+      MYSQL_DATABASE: userdb
+      MYSQL_USER: dbuser
+      MYSQL_PASSWORD: test123
+volumes:
+  myapp-db-vol:
